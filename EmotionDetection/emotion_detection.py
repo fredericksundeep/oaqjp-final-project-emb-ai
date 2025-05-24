@@ -34,6 +34,9 @@ def emotion_detector(text_to_analyze):
         }
         dominant_emotion = max(emotion_scores, key=emotion_scores.get)
 
+        if emotion_scores[dominant_emotion] == 0:
+            dominant_emotion = None
+
         # Prepare final output
         final_result = {
             'anger': anger_score,
@@ -48,6 +51,16 @@ def emotion_detector(text_to_analyze):
         print(json.dumps(final_result, indent=2))
 
         return final_result
-        
+
+    elif response.status_code == 400:
+        return {
+            'anger': None,
+            'disgust': None,
+            'fear': None,
+            'joy': None,
+            'sadness': None,
+            'dominant_emotion': None
+        }
+
     else:
         raise Exception(f"Request failed with status code {response.status_code}: {response.text}")
